@@ -12,7 +12,7 @@ const routes = [
     path: '/book/:book',
     name: 'BookDetails',
     component: BookDetails,
-  },
+  }
 ];
 
 const router = createRouter({

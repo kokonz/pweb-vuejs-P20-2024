@@ -4,13 +4,16 @@
     <div class="book-details">
       <h2>{{ book.title }}</h2>
       <p><strong>Author:</strong> {{ book.author }}</p>
-      <button class="details-button" @click="showDetails(book._id)">Details</button>
+      <button class="details-button" @click="openModal">Details</button>
     </div>
+
+    <BookDetails v-if="isModalVisible" :book="book" @close="closeModal" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from 'vue';
+import { ref } from 'vue';
+import BookDetails from './BookDetails.vue';
 
 interface Book {
   _id: string;
@@ -19,16 +22,21 @@ interface Book {
   coverImage: string;
 }
 
-defineProps({
+const props = defineProps({
   book: {
     type: Object as () => Book,
     required: true,
   },
 });
 
-const showDetails = (bookId: string) => {
-  const event = new CustomEvent('show-details', { detail: bookId });
-  window.dispatchEvent(event);
+const isModalVisible = ref(false);
+
+const openModal = () => {
+  isModalVisible.value = true;
+};
+
+const closeModal = () => {
+  isModalVisible.value = false;
 };
 </script>
 
