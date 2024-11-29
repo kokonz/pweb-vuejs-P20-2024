@@ -1,3 +1,13 @@
+<template>
+  <div class="book-container">
+    <div class="books-list">
+      <div v-if="isLoading" class="loading-text">Loading...</div>
+      <div v-else-if="hasError" class="error-text">Error loading the books.</div>
+      <BookCard v-else v-for="book in books" :key="book._id" :book="book" />
+    </div>
+  </div>
+</template>
+
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import BookCard from '../components/BookCard.vue';
@@ -24,16 +34,28 @@ interface Book {
 
 const books = ref<Book[]>([]);
 const selectedBook = ref<Book | null>(null);
+const isLoading = ref(true);
+const hasError = ref(false);
 
 const fetchBooks = async () => {
+  isLoading.value = true;
+  hasError.value = false;
+
   try {
     const response = await fetch('/book');
+    if (!response.ok) throw new Error('Failed to fetch books');
     const result = await response.json();
+
     if (result.status === 'success') {
       books.value = result.data;
+    } else {
+      throw new Error('Unexpected response format');
     }
   } catch (error) {
     console.error('Error fetching books:', error);
+    hasError.value = true;
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -59,15 +81,6 @@ onMounted(() => {
 });
 </script>
 
-<template>
-  <div class="book-container">
-    <div class="books-list">
-      <BookCard v-for="book in books" :key="book._id" :book="book" />
-    </div>
-  </div>
-</template>
-
-
 <style scoped>
 .book-container {
   width: 75%;
@@ -84,5 +97,19 @@ onMounted(() => {
   padding: 20px;
   margin-top: 100px;
   margin-bottom: 80px;
+}
+
+.loading-text {
+  font-size: 1.5rem;
+  color: gray;
+  text-align: center;
+  margin: 20px;
+}
+
+.error-text {
+  font-size: 1.5rem;
+  color: red;
+  text-align: center;
+  margin: 20px;
 }
 </style>

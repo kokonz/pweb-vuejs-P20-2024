@@ -1,13 +1,18 @@
-<script setup>
-import { RouterView } from 'vue-router';
-</script>
-
 <template>
   <div class="top-header">
     <h1>LibraryIT</h1>
+    <div class="top-links">
+      <a href="/about">About</a>
+      <a href="/">Books</a>
+      <a href="/add">Add Book</a>
+    </div>
   </div>
   <RouterView />
 </template>
+
+<script setup>
+import { RouterView } from 'vue-router';
+</script>
 
 <style scoped>
 body {
@@ -34,4 +39,20 @@ body {
   font-weight: 500;
   margin-left: 15px;
 }
+
+.top-links {
+  position: fixed;
+  right: 5%;
+  height: 75px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.top-links a {
+  color: black;
+  font-size: 20px;
+}
+
 </style>

@@ -14,6 +14,8 @@
         <p><strong>Description:</strong> {{ book.description }}</p>
         <p><strong>Tags:</strong> {{ book.tags.join(', ') }}</p>
         <p><strong>Quantity:</strong> {{ book.qty }} (Initial: {{ book.initialQty }})</p>
+
+        <RemoveBook :book="book" />
       </div>
     </div>
   </div>
@@ -21,6 +23,7 @@
 
 <script lang="ts" setup>
 import { defineProps, defineEmits } from 'vue';
+import RemoveBook from './RemoveBook.vue';
 
 const props = defineProps({
   book: {
